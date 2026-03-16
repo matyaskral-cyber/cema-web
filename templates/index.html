@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ c.meta_title }}</title>
+  <meta name="description" content="{{ c.meta_description }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:       #0C1A0D;
+      --dark2:      #122014;
+      --green:      #1E4D14;
+      --green2:     #163A0F;
+      --green3:     #2E7D32;
+      --green-lt:   #4CAF50;
+      --green-pale: #E8F5E9;
+      --cream:      #FAF8F4;
+      --cream2:     #F3EDE3;
+      --white:      #FFFFFF;
+      --text:       #1C2B1D;
+      --text-soft:  #4A6347;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── SCROLL ANIMATIONS ─────────────────────────── */
+    [data-animate] {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    [data-animate].is-visible { opacity: 1; transform: translateY(0); }
+    [data-animate-delay="1"] { transition-delay: 0.1s; }
+    [data-animate-delay="2"] { transition-delay: 0.2s; }
+    [data-animate-delay="3"] { transition-delay: 0.3s; }
+    [data-animate-delay="4"] { transition-delay: 0.4s; }
+    [data-animate-delay="5"] { transition-delay: 0.5s; }
+
+    /* ── NAVBAR ─────────────────────────────────────── */
+    nav {
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+      height: 70px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 4px 20px rgba(0,0,0,.05);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-text {
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-soft);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-phone {
+      background: var(--green) !important;
+      color: white !important;
+      padding: 9px 20px !important;
+      border-radius: 6px !important;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+      transition: background .2s !important;
+    }
+
+    .nav-phone:hover { background: var(--green3) !important; color: white !important; }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 0; right: 0;
+      background: white;
+      border-top: 1px solid rgba(0,0,0,.08);
+      padding: 24px 20px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    }
+
+    .nav-mobile.open { display: flex; }
+
+    .nav-mobile a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      transition: color .2s;
+    }
+
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green); }
+
+    .nav-phone-mobile {
+      margin-top: 12px;
+      background: var(--green) !important;
+      color: white !important;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 700 !important;
+      padding: 14px !important;
+      border-bottom: none !important;
+    }
+
+    /* ── HERO ───────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 680px;
+    }
+
+    .hero-left {
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      padding: 80px 64px;
+    }
+
+    .hero-content {
+      color: white;
+      max-width: 480px;
+    }
+
+    .hero-photo {
+      overflow: hidden;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 45%;
+      display: block;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-style: normal;
+      font-size: clamp(44px, 5.5vw, 82px);
+      font-weight: 900;
+      color: white;
+      line-height: 1.0;
+      margin-bottom: 28px;
+      letter-spacing: -2px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: rgba(255,255,255,.75);
+      font-weight: 700;
+    }
+
+    .hero h1 strong {
+      font-weight: 900;
+      font-size: 1em;
+      letter-spacing: -2px;
+      display: block;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 36px;
+      line-height: 1.75;
+      max-width: 400px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--green);
+      padding: 14px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      transition: background .2s, transform .15s;
+      display: inline-block;
+    }
+
+    .btn-white:hover { background: #f0f0f0; transform: translateY(-2px); }
+
+    .btn-outline-white {
+      background: transparent;
+      color: white;
+      padding: 14px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1.5px solid rgba(255,255,255,.35);
+      transition: border-color .2s;
+      display: inline-block;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn-outline-white:hover { border-color: rgba(255,255,255,.75); }
+
+    .hero-stats {
+      display: flex;
+      margin-top: 48px;
+      border-top: 1px solid rgba(255,255,255,.15);
+      padding-top: 32px;
+      gap: 32px;
+    }
+
+    .hero-stat {
+      text-align: left;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .hero-stat span {
+      font-size: 10px;
+      color: rgba(255,255,255,.45);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── STATS BAR ─────────────────────────────────── */
+    .stats-bar {
+      background: var(--cream);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+
+    .stats-bar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 52px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-item {
+      padding: 32px 0;
+      text-align: center;
+      border-right: 1px solid rgba(0,0,0,.07);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1;
+      letter-spacing: -1.5px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 500;
+    }
+
+    /* ── BRANDS ─────────────────────────────────────── */
+    .brands {
+      background: var(--dark);
+      padding: 20px 52px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .brands-label {
+      color: rgba(255,255,255,.28);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .brands-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,.1);
+      flex-shrink: 0;
+    }
+
+    .brands-list {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .brand-tag {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: opacity .2s;
+      opacity: 0.45;
+    }
+
+    .brand-tag:hover { opacity: 0.85; }
+
+    .brand-tag img {
+      height: 20px;
+      width: auto;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
+
+    .brand-tag-text {
+      color: rgba(255,255,255,1);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── SECTION BASE ──────────────────────────────── */
+    .section { padding: 96px 52px; }
+    .section-cream { background: var(--cream); }
+    .section-white { background: var(--white); }
+    .section-dark  { background: var(--dark2); }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green3);
+      margin-bottom: 16px;
+    }
+
+    .section-heading {
+      font-family: 'Outfit', sans-serif;
+      font-style: normal;
+      font-size: clamp(30px, 3.8vw, 52px);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1.5px;
+    }
+
+    .section-body {
+      font-size: 16px;
+      color: var(--text-soft);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    /* ── MACHINE CARDS ─────────────────────────────── */
+    .machines-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .machine-card {
+      border-radius: 4px;
+      overflow: hidden;
+      background: white;
+      transition: box-shadow .3s, transform .25s;
+      border: 1px solid rgba(0,0,0,.07);
+    }
+
+    .machine-card:hover {
+      box-shadow: 0 20px 56px rgba(0,0,0,.11);
+      transform: translateY(-5px);
+    }
+
+    .machine-img-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 240px;
+    }
+
+    .machine-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s ease;
+    }
+
+    .machine-card:hover .machine-img-wrap img { transform: scale(1.05); }
+
+    .machine-category {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: white;
+      background: var(--green);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    .machine-body { padding: 22px 24px 28px; }
+
+    .machine-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .machine-card p {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.7;
+    }
+
+    /* ── SERVICES 3-TONE ───────────────────────────── */
+    .services-trio {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 64px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0,0,0,.1);
+    }
+
+    .service-panel { padding: 48px 40px; }
+
+    .service-panel-dark { background: var(--green); }
+    .service-panel-mid  { background: #296B1A; }
+    .service-panel-light {
+      background: var(--cream);
+      border: 1px solid rgba(0,0,0,.07);
+      border-left: none;
+    }
+
+    .service-panel-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 24px;
+      opacity: 0.2;
+      letter-spacing: -2px;
+    }
+
+    .service-panel-dark .service-panel-num,
+    .service-panel-mid  .service-panel-num { color: white; }
+    .service-panel-light .service-panel-num { color: var(--green); }
+
+    .service-panel h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 21px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .service-panel-dark h3,
+    .service-panel-mid  h3 { color: white; }
+    .service-panel-light h3 { color: var(--text); }
+
+    .service-panel p { font-size: 14px; line-height: 1.75; }
+    .service-panel-dark p,
+    .service-panel-mid  p { color: rgba(255,255,255,.7); }
+    .service-panel-light p { color: var(--text-soft); }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: gap .2s;
+    }
+
+    .service-panel-dark .service-link,
+    .service-panel-mid  .service-link { color: rgba(255,255,255,.6); }
+    .service-panel-light .service-link { color: var(--green); }
+    .service-link:hover { gap: 10px; }
+
+    /* ── RECENZE ───────────────────────────────────── */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 56px;
+    }
+
+    .review-card {
+      background: var(--cream);
+      border-radius: 6px;
+      padding: 40px 36px 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .review-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.08);
+    }
+
+    .review-card::before {
+      content: '\201C';
+      position: absolute;
+      top: -10px;
+      left: 28px;
+      font-size: 120px;
+      font-family: Georgia, serif;
+      color: var(--green);
+      opacity: 0.12;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 20px;
+    }
+
+    .review-stars span { color: #F59E0B; font-size: 18px; }
+
+    .review-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      font-style: italic;
+      flex: 1;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .review-avatar {
+      width: 44px;
+      height: 44px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: white;
+      flex-shrink: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .review-name { font-size: 15px; font-weight: 700; color: var(--text); }
+    .review-source { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+
+    .reviews-cta { margin-top: 36px; }
+
+    .reviews-cta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1.5px solid rgba(30,77,20,.2);
+      padding: 11px 22px;
+      border-radius: 6px;
+      transition: background .2s, border-color .2s;
+    }
+
+    .reviews-cta a:hover { background: var(--green-pale); border-color: var(--green); }
+
+    /* ── ABOUT SPLIT ───────────────────────────────── */
+    .about-split {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-img {
+      border-radius: 4px;
+      overflow: hidden;
+      height: 520px;
+    }
+
+    .about-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .about-text p {
+      font-size: 15px;
+      color: var(--text-soft);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+
+    .about-features {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .about-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      font-size: 11px;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* ── PHOTO STRIP ───────────────────────────────── */
+    .photo-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      height: 360px;
+    }
+
+    .photo-strip-item { overflow: hidden; }
+
+    .photo-strip-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s;
+    }
+
+    .photo-strip-item:hover img { transform: scale(1.04); }
+
+    /* ── SERVIS GALERIE ────────────────────────────── */
+    .servis-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 52px;
+    }
+
+    .servis-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+      transition: transform .35s, box-shadow .35s;
+    }
+
+    .servis-img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 32px rgba(0,0,0,.14);
+    }
+
+    /* ── KARIÉRA ───────────────────────────────────── */
+    .kariera-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .kariera-photo {
+      border-radius: 4px;
+      overflow: hidden;
+      height: 380px;
+    }
+
+    .kariera-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(.7);
+    }
+
+    .kariera-content { display: flex; flex-direction: column; gap: 20px; }
+
+    .kariera-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 6px;
+      padding: 24px 26px;
+      transition: background .2s;
+    }
+
+    .kariera-card:hover { background: rgba(255,255,255,.11); }
+
+    .kariera-card h3 { font-size: 17px; font-weight: 700; color: white; margin-bottom: 6px; }
+    .kariera-card p  { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.65; margin-bottom: 14px; }
+
+    .kariera-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .kariera-tag {
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.6);
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── BUTTONS ───────────────────────────────────── */
+    .btn-green {
+      display: inline-block;
+      background: var(--green3);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-green:hover { background: var(--green); transform: translateY(-2px); }
+
+    .btn-green-outline {
+      display: inline-block;
+      padding: 12px 28px;
+      border: 1.5px solid rgba(255,255,255,.28);
+      color: rgba(255,255,255,.75);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      transition: border-color .2s, background .2s;
+    }
+
+    .btn-green-outline:hover { border-color: rgba(255,255,255,.65); background: rgba(255,255,255,.07); }
+
+    /* ── CONTACT FORM ──────────────────────────────── */
+    .contact-form-wrap { max-width: 680px; margin: 0 auto; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid rgba(0,0,0,.11);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: white;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(30,77,20,.09);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .form-submit { margin-top: 8px; }
+
+    .form-submit button {
+      width: 100%;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 15px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+
+    .form-submit button:hover { background: var(--green3); transform: translateY(-1px); }
+
+    .form-note { text-align: center; font-size: 12px; color: var(--text-soft); margin-top: 12px; }
+
+    /* ── CONTACT ───────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 52px;
+      margin-top: 52px;
+    }
+
+    .contact-persons { display: flex; flex-direction: column; gap: 12px; }
+
+    .contact-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 6px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: background .2s;
+    }
+
+    .contact-card:hover { background: rgba(255,255,255,.1); }
+
+    .contact-avatar {
+      width: 42px;
+      height: 42px;
+      background: var(--green3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: white;
+      flex-shrink: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .contact-info h4 { font-size: 14px; font-weight: 700; color: white; margin-bottom: 1px; }
+    .contact-info .role { font-size: 10px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .contact-info a { font-size: 13px; color: rgba(255,255,255,.55); text-decoration: none; }
+    .contact-info a:hover { color: white; }
+
+    .contact-sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .info-box {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .info-box h3 { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      font-size: 14px;
+    }
+
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row span { color: rgba(255,255,255,.4); }
+    .info-row strong { color: white; }
+
+    .map-btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      background: var(--green3);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      transition: background .2s;
+    }
+
+    .map-btn:hover { background: var(--green); }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer { background: var(--dark); }
+    footer p { font-size: 13px; color: rgba(255,255,255,.22); }
+    footer a { color: rgba(255,255,255,.28); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: rgba(255,255,255,.7); }
+
+    /* ── BACK TO TOP ───────────────────────────────── */
+    .back-to-top {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 42px;
+      height: 42px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .3s, transform .3s, background .2s;
+      z-index: 50;
+      text-decoration: none;
+    }
+
+    .back-to-top.visible { opacity: 1; transform: translateY(0); }
+    .back-to-top:hover { background: var(--green3); }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .services-trio { grid-template-columns: 1fr; }
+      .about-split { grid-template-columns: 1fr; gap: 40px; }
+      .about-img { height: 340px; }
+    }
+
+    @media (max-width: 960px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 60px 20px 48px; }
+      .hero-photo { height: 300px; }
+      .hero-stats { gap: 20px; }
+      .section { padding: 64px 20px; }
+      .brands { padding: 20px; gap: 20px; }
+      .machines-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .kariera-grid { grid-template-columns: 1fr; }
+      .kariera-photo { display: none; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-column: 1fr; }
+      .photo-strip { height: 240px; }
+      .servis-grid { grid-template-columns: 1fr 1fr; }
+      .stats-bar-inner { padding: 0 20px; }
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 38px; }
+      .hero-photo { height: 220px; }
+      .servis-grid { grid-template-columns: 1fr; }
+      .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
+      .photo-strip { grid-template-columns: 1fr 1fr; height: 200px; }
+      .photo-strip-item:last-child { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000539-5fe6d60e01/cema04.png?ph=a5400b3801" alt="CEMA servis" style="height:44px;width:auto;display:block;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#stroje">Stroje</a></li>
+    <li><a href="#sluzby">Služby</a></li>
+    <li><a href="#recenze">Recenze</a></li>
+    <li><a href="#o-nas">O nás</a></li>
+    <li><a href="#kariera">Kariéra</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+    <li><a href="tel:777400962" class="nav-phone">☎ 777 400 962</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILNÍ MENU -->
+<div class="nav-mobile" id="navMobile">
+  <a href="#stroje">Stroje</a>
+  <a href="#sluzby">Služby</a>
+  <a href="#recenze">Recenze</a>
+  <a href="#o-nas">O nás</a>
+  <a href="#kariera">Kariéra</a>
+  <a href="#kontakt">Kontakt</a>
+  <a href="tel:777400962" class="nav-phone-mobile">☎ 777 400 962</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-content">
+      <div class="hero-eyebrow">{{ c.hero_eyebrow }}</div>
+      <h1>{{ c.hero_nadpis|replace('\n', '<br>')|safe }}</h1>
+      <p>{{ c.hero_text }}</p>
+      <div class="hero-btns">
+        <a href="#stroje" class="btn-white">{{ c.hero_btn1 }}</a>
+        <a href="#kontakt" class="btn-outline-white">{{ c.hero_btn2 }}</a>
+      </div>
+      <div class="hero-stats">
+        {% for s in c.hero_stats %}
+        <div class="hero-stat">
+          <strong>{{ s.value }}</strong>
+          <span>{{ s.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <img src="{{ c.hero_foto }}" alt="CEMA servis" />
+  </div>
+</section>
+
+
+<!-- BRANDS -->
+<div class="brands">
+  <div class="brands-label">Zastupujeme</div>
+  <div class="brands-divider"></div>
+  <div class="brands-list">
+    <a class="brand-tag" href="https://www.austrodiesel.cz/cz/massey-ferguson-stredni-a-vychodni-evropa/" target="_blank" rel="noopener">
+      <img src="https://s7d9.scene7.com/is/image/agco/header-mf-c-90x60?fmt=png-alpha" alt="Massey Ferguson" style="height:24px;">
+    </a>
+    <a class="brand-tag" href="https://www.valtra.cz/" target="_blank" rel="noopener">
+      <img src="https://s7d9.scene7.com/is/image/agco/v-logo-header?fmt=png-alpha" alt="Valtra" style="height:22px;">
+    </a>
+    <a class="brand-tag" href="https://www.mchale.net/" target="_blank" rel="noopener">
+      <img src="https://www.mchale.net/wp-content/uploads/2022/06/MCHALE-341C-GREEN-LOGO-MASTER.svg" alt="McHale" style="height:20px;">
+    </a>
+    <a class="brand-tag" href="https://cz.kverneland.com/" target="_blank" rel="noopener">
+      <span class="brand-tag-text">Kverneland</span>
+    </a>
+    <a class="brand-tag" href="https://iseki.cz/" target="_blank" rel="noopener">
+      <span class="brand-tag-text">Iseki</span>
+    </a>
+    <a class="brand-tag" href="https://www.merlo.com/" target="_blank" rel="noopener">
+      <span class="brand-tag-text">Merlo</span>
+    </a>
+    <a class="brand-tag" href="https://polaris-goupil.cz/" target="_blank" rel="noopener">
+      <img src="https://polaris-goupil.cz/wp-content/uploads/Goupil-logo.png" alt="Goupil" style="height:18px;">
+    </a>
+    <a class="brand-tag" href="https://www.orec.cz/" target="_blank" rel="noopener">
+      <img src="https://www.orec.cz/wp-content/uploads/2019/04/Logo-Orec.png" alt="Orec" style="height:20px;">
+    </a>
+    <a class="brand-tag" href="https://www.hardi.com/" target="_blank" rel="noopener">
+      <span class="brand-tag-text">Hardi</span>
+    </a>
+    <a class="brand-tag" href="https://www.schaeffer-loader.com/" target="_blank" rel="noopener">
+      <span class="brand-tag-text">Schäffer</span>
+    </a>
+    <a class="brand-tag" href="https://www.quicke.com/" target="_blank" rel="noopener">
+      <span class="brand-tag-text">Quicke</span>
+    </a>
+  </div>
+</div>
+
+<!-- STROJE -->
+<section class="section section-cream" id="stroje">
+  <div class="section-inner">
+    <div data-animate>
+      <div class="section-eyebrow">Náš sortiment</div>
+      <h2 class="section-heading">Stroje pro každou práci</h2>
+      <p class="section-body">Nové i použité stroje od prověřených výrobců. Poradíme vám s výběrem.</p>
+    </div>
+
+    <div class="machines-grid">
+      {% for s in c.stroje if s.aktivni %}
+      <a href="{{ s.url }}" target="_blank" rel="noopener" class="machine-card" data-animate data-animate-delay="{{ loop.index % 3 }}" style="text-decoration:none;color:inherit">
+        <div class="machine-img-wrap">
+          <img src="{{ s.foto }}" alt="{{ s.nazev }}" />
+          <div class="machine-category">{{ s.kategorie }}</div>
+        </div>
+        <div class="machine-body">
+          <h3>{{ s.nazev }}</h3>
+          <p>{{ s.popis }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES 3-TONE -->
+<section class="section section-white" id="sluzby">
+  <div class="section-inner">
+    <div data-animate>
+      <div class="section-eyebrow">Co pro vás děláme</div>
+      <h2 class="section-heading">Kompletní péče<br>o vaši techniku</h2>
+    </div>
+
+    <div class="services-trio" data-animate>
+      {% set panel_classes = ['service-panel-dark', 'service-panel-mid', 'service-panel-light'] %}
+      {% for s in c.sluzby %}
+      <div class="service-panel {{ panel_classes[loop.index0 % 3] }}">
+        <div class="service-panel-num">{{ s.cislo }}</div>
+        <h3>{{ s.nadpis }}</h3>
+        <p>{{ s.text }}</p>
+        <a href="#kontakt" class="service-link">{{ s.link_text }}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- RECENZE -->
+<section class="section section-white" id="recenze">
+  <div class="section-inner">
+    <div data-animate style="display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px;margin-bottom:0;">
+      <div>
+        <div class="section-eyebrow">Co říkají zákazníci</div>
+        <h2 class="section-heading">Recenze a hodnocení</h2>
+      </div>
+      <div style="padding-bottom:8px;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:22px;color:#F59E0B;letter-spacing:2px;">★★★★★</span>
+        <span style="font-size:13px;color:var(--text-soft);font-weight:600;">5,0 / 5</span>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      {% for r in c.recenze if r.aktivni %}
+      <div class="review-card" data-animate data-animate-delay="{{ loop.index }}">
+        <div class="review-stars">
+          {% for i in range(r.hvezdy|default(5)) %}<span>★</span>{% endfor %}
+        </div>
+        <p class="review-text">{{ r.text }}</p>
+        <div class="review-author">
+          <div class="review-avatar">{{ r.inicialy }}</div>
+          <div>
+            <div class="review-name">{{ r.jmeno }}</div>
+            <div class="review-source">{{ r.zdroj }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="reviews-cta" data-animate>
+      <a href="https://maps.google.com/?q=CEMA+servis+Horní+Skrýchov+91+Jindřichův+Hradec" target="_blank" rel="noopener">
+        ⭐ Zobrazit všechny recenze na Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section section-cream" id="o-nas">
+  <div class="section-inner">
+    <div class="about-split">
+      <div class="about-img" data-animate>
+        <img src="{{ c.about_foto }}" alt="CEMA servis areál" />
+      </div>
+      <div class="about-text" data-animate data-animate-delay="2">
+        <div class="section-eyebrow">O nás</div>
+        <h2 class="section-heading">{{ c.about_nadpis }}</h2>
+        <p>{{ c.about_text1 }}</p>
+        <p>{{ c.about_text2 }}</p>
+        <div class="about-features">
+          {% for f in c.about_features %}
+          <div class="about-feature"><div class="check">✓</div>{{ f }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP -->
+<div class="photo-strip" data-animate>
+  {% for p in c.photo_strip %}
+  <div class="photo-strip-item">
+    <img src="{{ p.foto }}" alt="{{ p.alt }}" />
+  </div>
+  {% endfor %}
+</div>
+
+<!-- FULL BLEED CTA -->
+<section style="position:relative;min-height:380px;display:flex;align-items:center;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:url('{{ c.cta_foto }}');background-size:cover;background-position:center;filter:brightness(.22);"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,26,11,.98) 48%,rgba(10,26,11,.25));"></div>
+  <div style="position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 52px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;">{{ c.cta_eyebrow }}</div>
+    <h2 style="font-family:'Outfit',sans-serif;font-style:normal;font-size:clamp(36px,5vw,64px);font-weight:900;color:white;line-height:1.0;max-width:560px;margin-bottom:32px;letter-spacing:-2px;">{{ c.cta_nadpis|replace('\n', '<br>')|safe }}</h2>
+    <a href="#kontakt" class="btn-green">{{ c.cta_btn }}</a>
+  </div>
+</section>
+
+<!-- SERVIS FOTOGALERIE -->
+<section class="section section-white" id="servis-galerie">
+  <div class="section-inner">
+    <div data-animate>
+      <div class="section-eyebrow">Servis &amp; provoz</div>
+      <h2 class="section-heading">Náš areál a servisní zázemí</h2>
+      <p class="section-body">Vlastní servisní hala s mostovým jeřábem 5 t, zázemí pro opravy a uskladnění techniky 3 km od Jindřichova Hradce.</p>
+    </div>
+
+    <div class="servis-grid" data-animate>
+      {% for g in c.galerie %}
+      <div style="border-radius:4px;overflow:hidden;aspect-ratio:4/3;">
+        <img class="servis-img" src="{{ g.foto }}" alt="{{ g.alt }}" />
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- KARIÉRA -->
+<section class="section section-dark" id="kariera">
+  <div class="section-inner">
+    <div class="kariera-grid">
+      <div class="kariera-photo" data-animate>
+        <img src="https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002527-514e1514e2/1.1.jpeg?ph=a5400b3801" alt="Práce v CEMA servis" />
+      </div>
+      <div class="kariera-content" data-animate data-animate-delay="2">
+        <div>
+          <div class="section-eyebrow" style="color:rgba(255,255,255,.3);">Kariéra</div>
+          <h2 class="section-heading" style="color:white;">Hledáme kolegy do týmu</h2>
+          <p class="section-body" style="color:rgba(255,255,255,.5);max-width:440px;">Jsme rostoucí firma s přátelským kolektivem. Pokud vás baví zemědělská technika a chcete pracovat v regionu, ozvěte se.</p>
+        </div>
+
+        {% for k in c.kariera if k.aktivni %}
+        <div class="kariera-card">
+          <h3>{{ k.nazev }}</h3>
+          <p>{{ k.popis }}</p>
+          <div class="kariera-tags">
+            {% for tag in k.tagy.split(', ') %}
+            <span class="kariera-tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <a href="mailto:{{ c.kontakt_kariera_email }}" class="btn-green-outline">
+          Napsat životopis → {{ c.kontakt_kariera_email }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AKTUALITY -->
+{% if c.aktuality %}
+<section class="section section-white" id="aktuality">
+  <div class="section-inner">
+    <div data-animate style="margin-bottom:48px;">
+      <div class="section-eyebrow">Novinky</div>
+      <h2 class="section-heading">Aktuality</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px;">
+      {% for a in c.aktuality if a.aktivni %}
+      <div data-animate style="background:var(--cream); border-radius:12px; padding:28px 28px 24px; display:flex; flex-direction:column; gap:12px;">
+        <div style="font-size:.75rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--green);">{{ a.datum }}</div>
+        <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark1); line-height:1.4; margin:0;">{{ a.titulek }}</h3>
+        <p style="font-size:.9rem; color:var(--dark3); line-height:1.6; margin:0;">{{ a.obsah }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- KONTAKTNÍ FORMULÁŘ -->
+<section class="section section-cream" id="napsat">
+  <div class="contact-form-wrap">
+    <div data-animate style="text-align:center;margin-bottom:48px;">
+      <div class="section-eyebrow" style="text-align:center;">Napište nám</div>
+      <h2 class="section-heading" style="text-align:center;">Máte zájem o stroj nebo servis?</h2>
+      <p class="section-body" style="margin:0 auto;text-align:center;">Ozveme se vám do 24 hodin.</p>
+    </div>
+
+    <form action="mailto:{{ c.kontakt_form_email }}" method="post" enctype="text/plain" data-animate data-animate-delay="2">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="fname">Jméno a příjmení *</label>
+          <input type="text" id="fname" name="jmeno" placeholder="Jan Novák" required />
+        </div>
+        <div class="form-group">
+          <label for="fphone">Telefon *</label>
+          <input type="tel" id="fphone" name="telefon" placeholder="+420 777 123 456" required />
+        </div>
+        <div class="form-group">
+          <label for="femail">E-mail</label>
+          <input type="email" id="femail" name="email" placeholder="jan@email.cz" />
+        </div>
+        <div class="form-group">
+          <label for="ftopic">Týká se</label>
+          <select id="ftopic" name="tema">
+            <option value="">Vyberte téma...</option>
+            <option value="prodej">Prodej stroje</option>
+            <option value="servis">Servis / oprava</option>
+            <option value="nahradni-dily">Náhradní díly</option>
+            <option value="kariera">Kariéra</option>
+            <option value="jine">Jiné</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="fmsg">Zpráva *</label>
+          <textarea id="fmsg" name="zprava" placeholder="Popište, s čím vám můžeme pomoci..." required></textarea>
+        </div>
+      </div>
+      <div class="form-submit">
+        <button type="submit">Odeslat zprávu →</button>
+      </div>
+      <p class="form-note">Odesláním formuláře souhlasíte se zpracováním osobních údajů pro účely odpovědi na váš dotaz.</p>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section section-dark" id="kontakt">
+  <div class="section-inner">
+    <div data-animate>
+      <div class="section-eyebrow" style="color:rgba(255,255,255,.3);">Kontakt</div>
+      <h2 class="section-heading" style="color:white;">Obraťte se na nás</h2>
+      <p class="section-body" style="color:rgba(255,255,255,.45);">Napište nebo zavolejte přímo příslušnému specialistovi.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-persons" data-animate data-animate-delay="1">
+        {% for o in c.kontakt_osoby %}
+        <div class="contact-card">
+          <div class="contact-avatar">{{ o.inicialy }}</div>
+          <div class="contact-info">
+            <h4>{{ o.jmeno }}</h4>
+            <div class="role">{{ o.role }}</div>
+            <a href="tel:{{ o.tel|replace(' ', '') }}">{{ o.tel }}</a> &nbsp;·&nbsp;
+            <a href="mailto:{{ o.email }}">{{ o.email }}</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="contact-sidebar" data-animate data-animate-delay="2">
+        <div class="info-box">
+          <h3>Adresa &amp; firma</h3>
+          <div class="info-row">
+            <span>Adresa</span>
+            <strong>{{ c.kontakt_adresa }}</strong>
+          </div>
+          <div class="info-row">
+            <span>IČ</span>
+            <strong>{{ c.kontakt_ic }}</strong>
+          </div>
+          <div class="info-row">
+            <span>DIČ</span>
+            <strong>{{ c.kontakt_dic }}</strong>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h3>Otevírací doba</h3>
+          <div class="info-row">
+            <span>Pondělí – Pátek</span>
+            <strong>{{ c.kontakt_hodiny_pd }}</strong>
+          </div>
+          <div class="info-row">
+            <span>Víkend</span>
+            <span>{{ c.kontakt_hodiny_vikend }}</span>
+          </div>
+        </div>
+
+        <a href="{{ c.kontakt_maps }}" target="_blank" class="map-btn">
+          📍 Otevřít v Google Maps
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1100px;margin:0 auto;padding:56px 52px 28px;box-sizing:border-box;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.07);">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <svg width="36" height="36" viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="9" fill="#1E4D14"/><path d="M26 13.5C24.2 12.6 22.2 12 20 12C14.5 12 10 16.5 10 22C10 27.5 14.5 32 20 32C22.2 32 24.2 31.4 26 30.5" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="30" cy="22" r="4.5" stroke="#81C784" stroke-width="2" fill="none"/><line x1="30" y1="17" x2="30" y2="15" stroke="#81C784" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="29" x2="30" y2="27" stroke="#81C784" stroke-width="2" stroke-linecap="round"/><line x1="25" y1="22" x2="23" y2="22" stroke="#81C784" stroke-width="2" stroke-linecap="round"/><line x1="35" y1="22" x2="37" y2="22" stroke="#81C784" stroke-width="2" stroke-linecap="round"/></svg>
+          <div style="color:white;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:1.2;">CEMA servis<span style="display:block;font-size:10px;font-weight:500;color:rgba(255,255,255,.28);letter-spacing:.8px;text-transform:uppercase;">Zemědělská technika</span></div>
+        </div>
+        <p style="font-size:14px;color:rgba(255,255,255,.28);line-height:1.7;max-width:280px;">{{ c.footer_text }}</p>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.22);margin-bottom:18px;">Navigace</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <a href="#stroje">Stroje</a>
+          <a href="#sluzby">Služby</a>
+          <a href="#kariera">Kariéra</a>
+          <a href="#kontakt">Kontakt</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.22);margin-bottom:18px;">Kontakt</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <a href="tel:777400962">☎ 777 400 962</a>
+          <a href="mailto:servis@cemaservis.cz">servis@cemaservis.cz</a>
+          <span style="color:rgba(255,255,255,.22);font-size:13px;line-height:1.6;">Horní Skrýchov 91<br>377 01 Jindřichův Hradec</span>
+          <span style="color:rgba(255,255,255,.22);font-size:13px;">Po–Pá: 7:00–16:00</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:12px;">
+      <p>{{ c.footer_copyright }}</p>
+      <a href="{{ c.footer_facebook }}" target="_blank" rel="noopener">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<a href="#" class="back-to-top" id="backToTop" aria-label="Zpět nahoru">↑</a>
+
+<script>
+  const hamburger = document.getElementById('hamburger')
+  const navMobile = document.getElementById('navMobile')
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open')
+    navMobile.classList.toggle('open')
+  })
+
+  navMobile.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open')
+      navMobile.classList.remove('open')
+    })
+  })
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el))
+
+  const backToTop = document.getElementById('backToTop')
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 400)
+  })
+</script>
+
+</body>
+</html>

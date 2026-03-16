@@ -1,0 +1,248 @@
+{
+  "meta_title": "CEMA servis s.r.o. – Zemědělská, lesnická a komunální technika",
+  "meta_description": "Autorizovaný prodejce a servis zemědělské techniky v Jindřichově Hradci. Massey Ferguson, Valtra, Iseki a 15+ dalších značek.",
+  "hero_eyebrow": "Autorizovaný prodejce · Jindřichův Hradec · od 2013",
+  "hero_nadpis": "Zemědělská\na komunální\ntechnika",
+  "hero_text": "Massey Ferguson, Valtra, Iseki a 15+ dalších značek. Prodej, servis a náhradní díly 3 km od Jindřichova Hradce.",
+  "hero_btn1": "Prohlédnout stroje",
+  "hero_btn2": "Kontaktovat prodej",
+  "hero_foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002756-685ad685b0/MF-9S-FIELD-6.1.jpeg?ph=a5400b3801",
+  "hero_stats": [
+    {
+      "value": "12+",
+      "label": "Let praxe"
+    },
+    {
+      "value": "15+",
+      "label": "Značek"
+    },
+    {
+      "value": "3 km",
+      "label": "Od J. Hradce"
+    }
+  ],
+  "about_nadpis": "Váš lokální partner pro zemědělskou techniku",
+  "about_text1": "Zahájili jsme v lednu 2013 a díky rychlému růstu jsme se v roce 2015 přestěhovali do vlastního areálu v Horním Skrýchově — pouhé 3 km od Jindřichova Hradce.",
+  "about_text2": "Nabízíme kompletní dodavatelské služby se zaměřením na individuální přístup ke každému zákazníkovi — zemědělcům, obcím i správcům zeleně.",
+  "about_foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002455-dbd40dbd43/20231024_103620.jpeg?ph=a5400b3801",
+  "about_features": [
+    "Autorizovaný servis Massey Ferguson a Valtra",
+    "Servisní vozy — výjezdy přímo do terénu",
+    "Prodej nových i použitých strojů s poradenstvím",
+    "Rychlé dodávky originálních náhradních dílů"
+  ],
+  "sluzby": [
+    {
+      "cislo": "01",
+      "nadpis": "Záruční & pozáruční servis",
+      "text": "Autorizovaný servis MF, Valtra a SAME Deutz-Fahr. Výměna motorů GO a převodovek. Servisní výjezdy přímo na místo — minimalizujeme vaše prostoje.",
+      "link_text": "Objednat servis →"
+    },
+    {
+      "cislo": "02",
+      "nadpis": "Náhradní díly",
+      "text": "Rychlé dodávky originálních náhradních dílů pro všechny zastupované značky. Rozsáhlý skladový sortiment pro okamžité dodání.",
+      "link_text": "Poptávka dílů →"
+    },
+    {
+      "cislo": "03",
+      "nadpis": "Poradenství a prodej",
+      "text": "Pomůžeme s výběrem správného stroje pro vaše konkrétní potřeby. Nové i použité stroje, možnost leasingu a financování.",
+      "link_text": "Kontaktovat prodej →"
+    }
+  ],
+  "cta_eyebrow": "Autorizovaný servis od 2013",
+  "cta_nadpis": "Servisní výjezd\ndo 24 hodin —\nkdekoliv v regionu",
+  "cta_btn": "Kontaktovat servis →",
+  "cta_foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002659-d966cd966f/20240404_132208-2.jpeg?ph=a5400b3801",
+  "kontakt_osoby": [
+    {
+      "jmeno": "Martin Pastorek",
+      "role": "Prodej strojů",
+      "tel": "777 400 962",
+      "email": "pastorek@cemaservis.cz",
+      "inicialy": "MP"
+    },
+    {
+      "jmeno": "Čestmír Havel",
+      "role": "Prodej náhradních dílů",
+      "tel": "777 400 932",
+      "email": "havel@cemaservis.cz",
+      "inicialy": "ČH"
+    },
+    {
+      "jmeno": "Václav Haruda",
+      "role": "Vedoucí servisu",
+      "tel": "777 400 942",
+      "email": "haruda@cemaservis.cz",
+      "inicialy": "VH"
+    },
+    {
+      "jmeno": "Jiří Kučera",
+      "role": "Přejímací technik",
+      "tel": "724 020 602",
+      "email": "servis@cemaservis.cz",
+      "inicialy": "JK"
+    }
+  ],
+  "kontakt_adresa": "Horní Skrýchov 91, J. Hradec",
+  "kontakt_ic": "28149211",
+  "kontakt_dic": "CZ28149211",
+  "kontakt_hodiny_pd": "7:00 – 16:00",
+  "kontakt_hodiny_vikend": "Zavřeno",
+  "kontakt_maps": "https://maps.google.com/?q=Horní+Skrýchov+91+Jindřichův+Hradec",
+  "kontakt_form_email": "pastorek@cemaservis.cz",
+  "kontakt_kariera_email": "havlova@cemaservis.cz",
+  "footer_text": "Autorizovaný prodejce a servis zemědělské, komunální a lesnické techniky. Horní Skrýchov 91, Jindřichův Hradec.",
+  "footer_copyright": "© 2025 CEMA servis s.r.o. · IČ 28149211",
+  "footer_facebook": "https://facebook.com/cemaservis.cz",
+  "stroje": [
+    {
+      "id": 1,
+      "nazev": "Massey Ferguson",
+      "kategorie": "Traktory",
+      "popis": "Traktory, žací mlátičky a manipulátory od světové jedničky v zemědělské technice. Záruční i pozáruční servis.",
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002848-3100231004/Obr%C3%A1zek%20MF.jpeg?ph=a5400b3801",
+      "url": "https://www.austrodiesel.cz/cz/massey-ferguson-stredni-a-vychodni-evropa/",
+      "aktivni": true
+    },
+    {
+      "id": 2,
+      "nazev": "Valtra",
+      "kategorie": "Traktory",
+      "popis": "Finské traktory s vynikající přizpůsobivostí pro náročný terén. Kompletní servis a dodávky dílů.",
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002850-ae0f2ae0f4/Valtra%20obr%C3%A1zek-7.jpeg?ph=a5400b3801",
+      "url": "https://www.valtra.cz/",
+      "aktivni": true
+    },
+    {
+      "id": 3,
+      "nazev": "Kverneland",
+      "kategorie": "Aplikační technika",
+      "popis": "Precizní aplikační technika, secí stroje a půdní nástroje pro efektivní hospodaření.",
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002844-a3662a3664/Kverneland%20obr%C3%A1zek.jpeg?ph=a5400b3801",
+      "url": "https://cz.kverneland.com/",
+      "aktivni": true
+    },
+    {
+      "id": 4,
+      "nazev": "Iseki",
+      "kategorie": "Zahradní technika",
+      "popis": "Japonské malotraktory a zahradní technika pro obce, správce sportovišť a soukromé zahrady.",
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002812-7217c7217d/iseki-sxg327-133931.png?ph=a5400b3801",
+      "url": "https://iseki.cz/",
+      "aktivni": true
+    },
+    {
+      "id": 5,
+      "nazev": "Goupil",
+      "kategorie": "Elektromobily",
+      "popis": "Elektrická užitková vozidla pro komunální správu, letiště, průmyslové areály a areály zeleně.",
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002814-505a1505a3/GoupilPick-upGroup%281b%29LR_1440x650.png?ph=a5400b3801",
+      "url": "https://polaris-goupil.cz/",
+      "aktivni": true
+    },
+    {
+      "id": 6,
+      "nazev": "Orec",
+      "kategorie": "Mulčování",
+      "popis": "Japonské mulčovací stroje pro náročný terén — svahy, příkopy i nepřístupné plochy.",
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002816-89f7389f75/Orec-foto-1.jpeg?ph=a5400b3801",
+      "url": "https://www.orec.cz/",
+      "aktivni": true
+    }
+  ],
+  "aktuality": [
+    {
+      "id": 1,
+      "titulek": "Jarní servisní akce 2026 — připravte stroje na sezónu",
+      "obsah": "Před začátkem sezóny nabízíme výhodnou servisní prohlídku traktorů a samojezdů. Kontrola hydrauliky, brzd, osvětlení a první náplně za zvýhodněnou cenu. Termíny objednávek od dubna.",
+      "datum": "16. 3. 2026",
+      "aktivni": true
+    }
+  ],
+  "recenze": [
+    {
+      "id": 1,
+      "jmeno": "Jakub Havel",
+      "text": "Skvělý přístup ke klientovi, rychlý servis i dodání náhradních dílů. Traktor opravili do druhého dne, servisní technik přijel přímo k nám. Určitě doporučuji všem zemědělcům v regionu.",
+      "zdroj": "Firmy.cz · prosinec 2022",
+      "hvezdy": 5,
+      "inicialy": "JH",
+      "aktivni": true
+    },
+    {
+      "id": 2,
+      "jmeno": "David Kasper",
+      "text": "S CEMA servisem spolupracuji přes 5 let. Vždy profesionálně poradí, nechají stroj v perfektním stavu a cena je férová. Oceňuji hlavně rychlost a ochotu při servisních výjezdech.",
+      "zdroj": "Firmy.cz · červenec 2022",
+      "hvezdy": 5,
+      "inicialy": "DK",
+      "aktivni": true
+    }
+  ],
+  "kariera": [
+    {
+      "id": 1,
+      "nazev": "Servisní technik zemědělské techniky",
+      "popis": "Záruční a pozáruční opravy traktorů a strojů, servisní výjezdy k zákazníkům, diagnostika.",
+      "uvazek": "Plný úvazek",
+      "misto": "J. Hradec",
+      "tagy": "Plný úvazek, J. Hradec, Terén",
+      "aktivni": true
+    },
+    {
+      "id": 2,
+      "nazev": "Prodejce zemědělské techniky",
+      "popis": "Prodej nových a použitých strojů, práce se zákazníky, správa nabídky a poptávek náhradních dílů.",
+      "uvazek": "Plný úvazek",
+      "misto": "J. Hradec",
+      "tagy": "Plný úvazek, J. Hradec",
+      "aktivni": true
+    }
+  ],
+  "galerie": [
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002397-9bc8a9bc8d/20230627_145309-1.jpeg?ph=a5400b3801",
+      "alt": "Servis"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000826-95a9896a53/IMG_20170912_174359.jpg?ph=a5400b3801",
+      "alt": "Stroje v terénu"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000229-1e5731f50f/20160403_142605.jpg?ph=a5400b3801",
+      "alt": "Technika"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000254-c64f6c747a/IMG_8575w.jpg?ph=a5400b3801",
+      "alt": "Servisní práce"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000052-8adc08bd45/20150922_172618.jpg?ph=a5400b3801",
+      "alt": "Areál"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000349-784f47949a/cema_servis%20NEON%20I..JPG?ph=a5400b3801",
+      "alt": "CEMA servis neon"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200000288-30e4232d84/IMG_8226.JPG?ph=a5400b3801",
+      "alt": "Servis hala"
+    }
+  ],
+  "photo_strip": [
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002659-d966cd966f/20240404_132208-2.jpeg?ph=a5400b3801",
+      "alt": "Technika v poli"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002463-0b59b0b59e/20231024_103620-7.jpeg?ph=a5400b3801",
+      "alt": "Práce v terénu"
+    },
+    {
+      "foto": "https://a5400b3801.clvaw-cdnwnd.com/577e582d54c233c13bfb89f0bd4dcd20/200002818-1f70d1f70e/7c0b12f2-49c9-45db-893f-3586cc6155e5-420x236.jpeg?ph=a5400b3801",
+      "alt": "Servis"
+    }
+  ]
+}

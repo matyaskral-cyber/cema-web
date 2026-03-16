@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEMA Admin</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#1E4D14;--green2:#163A0F;--green3:#2E7D32;--cream:#FAF8F4;--text:#1C2B1D;--soft:#4A6347;--border:#E5E7EB;--red:#DC2626}
+body{font-family:system-ui,-apple-system,sans-serif;background:#F3F4F6;color:var(--text);font-size:14px}
+a{text-decoration:none;color:inherit}
+input,textarea,select{font-family:inherit;font-size:14px}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--green);flex-shrink:0;position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column}
+.sidebar-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,.1);font-size:18px;font-weight:800;color:white}
+.sidebar-logo span{color:#81C784}
+nav.sidebar-nav{flex:1;padding:12px 0}
+nav.sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.65);font-size:13px;font-weight:500;transition:all .15s;cursor:pointer}
+nav.sidebar-nav a:hover{color:white;background:rgba(255,255,255,.08)}
+nav.sidebar-nav a.active{color:white;background:rgba(255,255,255,.15)}
+nav.sidebar-nav a .icon{font-size:16px;width:20px;text-align:center}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:8px}
+.sidebar-footer a{color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;transition:color .15s}
+.sidebar-footer a:hover{color:white}
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar h1{font-size:17px;font-weight:700}
+.page-content{padding:28px}
+
+.card{background:white;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.card-header h2{font-size:15px;font-weight:700}
+.card-header .toggle{font-size:18px;color:#9CA3AF;transition:transform .2s}
+.card-header.collapsed .toggle{transform:rotate(-90deg)}
+.card-body{padding:20px}
+.card-body.collapsed{display:none}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:white;border:1px solid var(--border);border-radius:10px;padding:20px}
+.stat-num{font-size:28px;font-weight:800;color:var(--green);line-height:1}
+.stat-label{font-size:12px;color:var(--soft);margin-top:4px}
+
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:2px solid var(--border)}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--soft)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#F9FAFB}
+td{padding:10px 14px;vertical-align:middle}
+.thumb{width:48px;height:36px;object-fit:cover;border-radius:5px}
+.badge{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:#DCFCE7;color:#166534}
+.badge-gray{background:#F3F4F6;color:#6B7280}
+.actions{display:flex;gap:6px}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-green{background:var(--green);color:white}.btn-green:hover{background:var(--green2)}
+.btn-red{background:var(--red);color:white}.btn-red:hover{background:#B91C1C}
+.btn-outline{background:white;color:var(--text);border:1px solid var(--border)}.btn-outline:hover{background:#F9FAFB}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.form-group label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--soft)}
+.form-group input,.form-group textarea,.form-group select{border:1px solid var(--border);border-radius:7px;padding:10px 13px;outline:none;transition:border .2s;background:white}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--green)}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.img-preview{margin-top:8px;height:60px;border-radius:6px;object-fit:cover}
+.star{color:#F59E0B}
+
+.flash{padding:12px 16px;border-radius:8px;margin-bottom:20px;font-size:13px;font-weight:500}
+.flash-ok{background:#DCFCE7;color:#166534}
+.empty{padding:40px;text-align:center;color:#9CA3AF;font-size:13px}
+
+.save-bar{position:fixed;bottom:0;left:220px;right:0;background:white;border-top:1px solid var(--border);padding:14px 28px;display:flex;justify-content:flex-end;z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+.save-bar button{padding:11px 28px;font-size:14px}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:white;border-radius:12px;padding:28px;width:520px;max-width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h2{font-size:17px;font-weight:700;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+/* Page sections hidden by default */
+.page-section{display:none}
+.page-section.active{display:block}
+
+@media(max-width:768px){
+  .sidebar{width:60px}
+  .sidebar-logo,.sidebar-nav a span:not(.icon),.sidebar-footer{display:none}
+  .sidebar-nav a{justify-content:center;padding:14px}
+  .main{margin-left:60px}
+  .save-bar{left:60px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row,.form-row-3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">CEMA <span>admin</span></div>
+    <nav class="sidebar-nav">
+      <a onclick="go('dashboard')" id="nav-dashboard" class="active"><span class="icon">📊</span> <span>Přehled</span></a>
+      <a onclick="go('obsah')" id="nav-obsah"><span class="icon">📝</span> <span>Obsah webu</span></a>
+      <a onclick="go('stroje')" id="nav-stroje"><span class="icon">🚜</span> <span>Stroje</span></a>
+      <a onclick="go('aktuality')" id="nav-aktuality"><span class="icon">📰</span> <span>Aktuality</span></a>
+      <a onclick="go('recenze')" id="nav-recenze"><span class="icon">⭐</span> <span>Recenze</span></a>
+      <a onclick="go('kariera')" id="nav-kariera"><span class="icon">💼</span> <span>Kariéra</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" target="_blank">↗ Zobrazit web</a>
+      <a href="/admin/logout">← Odhlásit se</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 id="page-title">Přehled</h1>
+    </div>
+    <div class="page-content">
+      {% if saved %}<div class="flash flash-ok">Změny byly uloženy.</div>{% endif %}
+
+      <!-- DASHBOARD -->
+      <div class="page-section active" id="sec-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">{{ c.stroje|length }}</div><div class="stat-label">Strojů</div></div>
+          <div class="stat-card"><div class="stat-num">{{ c.aktuality|length }}</div><div class="stat-label">Aktualit</div></div>
+          <div class="stat-card"><div class="stat-num">{{ c.recenze|length }}</div><div class="stat-label">Recenzí</div></div>
+          <div class="stat-card"><div class="stat-num">{{ c.kariera|length }}</div><div class="stat-label">Pozic</div></div>
+        </div>
+      </div>
+
+      <!-- OBSAH WEBU -->
+      <div class="page-section" id="sec-obsah">
+        <form method="POST" id="obsah-form">
+          <!-- Meta -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>Meta & SEO</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              <div class="form-group"><label>Titulek stránky</label><input name="meta_title" value="{{ c.meta_title }}"></div>
+              <div class="form-group"><label>Meta popis</label><textarea name="meta_description" rows="2">{{ c.meta_description }}</textarea></div>
+            </div>
+          </div>
+
+          <!-- Hero -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>Hero sekce</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              <div class="form-group"><label>Eyebrow text</label><input name="hero_eyebrow" value="{{ c.hero_eyebrow }}"></div>
+              <div class="form-group"><label>Nadpis (enter = nový řádek)</label><textarea name="hero_nadpis" rows="3">{{ c.hero_nadpis }}</textarea></div>
+              <div class="form-group"><label>Podnapis</label><textarea name="hero_text" rows="2">{{ c.hero_text }}</textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label>Tlačítko 1</label><input name="hero_btn1" value="{{ c.hero_btn1 }}"></div>
+                <div class="form-group"><label>Tlačítko 2</label><input name="hero_btn2" value="{{ c.hero_btn2 }}"></div>
+              </div>
+              <h3 style="font-size:13px;margin:16px 0 10px;color:var(--soft)">Statistiky v hero</h3>
+              {% for s in c.hero_stats %}
+              <div class="form-row" style="margin-bottom:8px">
+                <div class="form-group" style="margin-bottom:0"><input name="stat_value_{{ loop.index0 }}" value="{{ s.value }}" placeholder="Hodnota"></div>
+                <div class="form-group" style="margin-bottom:0"><input name="stat_label_{{ loop.index0 }}" value="{{ s.label }}" placeholder="Popisek"></div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- O nás -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>O nás</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              <div class="form-group"><label>Nadpis</label><input name="about_nadpis" value="{{ c.about_nadpis }}"></div>
+              <div class="form-group"><label>Odstavec 1</label><textarea name="about_text1" rows="3">{{ c.about_text1 }}</textarea></div>
+              <div class="form-group"><label>Odstavec 2</label><textarea name="about_text2" rows="3">{{ c.about_text2 }}</textarea></div>
+              <h3 style="font-size:13px;margin:16px 0 10px;color:var(--soft)">Výhody (checkmarky)</h3>
+              {% for f in c.about_features %}
+              <div class="form-group" style="margin-bottom:8px"><input name="about_feature_{{ loop.index0 }}" value="{{ f }}"></div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Služby -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>Služby (3 panely)</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              {% for s in c.sluzby %}
+              <div style="padding:16px;background:#F9FAFB;border-radius:8px;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:700;color:var(--soft);margin-bottom:10px">Panel {{ loop.index }}</div>
+                <input type="hidden" name="sluzba_cislo_{{ loop.index0 }}" value="{{ s.cislo }}">
+                <div class="form-group"><label>Nadpis</label><input name="sluzba_nadpis_{{ loop.index0 }}" value="{{ s.nadpis }}"></div>
+                <div class="form-group"><label>Text</label><textarea name="sluzba_text_{{ loop.index0 }}" rows="3">{{ s.text }}</textarea></div>
+                <div class="form-group"><label>Text linku</label><input name="sluzba_link_{{ loop.index0 }}" value="{{ s.link_text }}"></div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>CTA sekce (fullbleed)</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              <div class="form-group"><label>Eyebrow</label><input name="cta_eyebrow" value="{{ c.cta_eyebrow }}"></div>
+              <div class="form-group"><label>Nadpis</label><textarea name="cta_nadpis" rows="3">{{ c.cta_nadpis }}</textarea></div>
+              <div class="form-group"><label>Tlačítko</label><input name="cta_btn" value="{{ c.cta_btn }}"></div>
+            </div>
+          </div>
+
+          <!-- Kontakt -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>Kontaktní údaje</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group"><label>Adresa</label><input name="kontakt_adresa" value="{{ c.kontakt_adresa }}"></div>
+                <div class="form-group"><label>Google Maps URL</label><input name="kontakt_maps" value="{{ c.kontakt_maps }}"></div>
+              </div>
+              <div class="form-row-3">
+                <div class="form-group"><label>IČ</label><input name="kontakt_ic" value="{{ c.kontakt_ic }}"></div>
+                <div class="form-group"><label>DIČ</label><input name="kontakt_dic" value="{{ c.kontakt_dic }}"></div>
+                <div class="form-group"><label>E-mail formuláře</label><input name="kontakt_form_email" value="{{ c.kontakt_form_email }}"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Hodiny Po-Pá</label><input name="kontakt_hodiny_pd" value="{{ c.kontakt_hodiny_pd }}"></div>
+                <div class="form-group"><label>Hodiny víkend</label><input name="kontakt_hodiny_vikend" value="{{ c.kontakt_hodiny_vikend }}"></div>
+              </div>
+              <div class="form-group"><label>Kariéra e-mail</label><input name="kontakt_kariera_email" value="{{ c.kontakt_kariera_email }}"></div>
+
+              <h3 style="font-size:13px;margin:20px 0 10px;color:var(--soft)">Kontaktní osoby</h3>
+              {% for o in c.kontakt_osoby %}
+              <div style="padding:14px;background:#F9FAFB;border-radius:8px;margin-bottom:10px">
+                <div class="form-row" style="margin-bottom:8px">
+                  <div class="form-group" style="margin-bottom:0"><label>Jméno</label><input name="osoba_jmeno_{{ loop.index0 }}" value="{{ o.jmeno }}"></div>
+                  <div class="form-group" style="margin-bottom:0"><label>Role</label><input name="osoba_role_{{ loop.index0 }}" value="{{ o.role }}"></div>
+                </div>
+                <div class="form-row-3">
+                  <div class="form-group" style="margin-bottom:0"><label>Telefon</label><input name="osoba_tel_{{ loop.index0 }}" value="{{ o.tel }}"></div>
+                  <div class="form-group" style="margin-bottom:0"><label>E-mail</label><input name="osoba_email_{{ loop.index0 }}" value="{{ o.email }}"></div>
+                  <div class="form-group" style="margin-bottom:0"><label>Iniciály</label><input name="osoba_inicialy_{{ loop.index0 }}" value="{{ o.inicialy }}"></div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+              <h2>Patička</h2><span class="toggle">▼</span>
+            </div>
+            <div class="card-body">
+              <div class="form-group"><label>Text patičky</label><textarea name="footer_text" rows="2">{{ c.footer_text }}</textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label>Copyright</label><input name="footer_copyright" value="{{ c.footer_copyright }}"></div>
+                <div class="form-group"><label>Facebook URL</label><input name="footer_facebook" value="{{ c.footer_facebook }}"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="save-bar">
+            <button type="submit" class="btn btn-green">Uložit všechny změny</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- STROJE -->
+      <div class="page-section" id="sec-stroje">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+          <button class="btn btn-green" onclick="openModal('stroje')">+ Nový stroj</button>
+        </div>
+        <div class="card"><div class="card-body" style="padding:0" id="stroje-table"></div></div>
+      </div>
+
+      <!-- AKTUALITY -->
+      <div class="page-section" id="sec-aktuality">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+          <button class="btn btn-green" onclick="openModal('aktuality')">+ Nová aktualita</button>
+        </div>
+        <div class="card"><div class="card-body" style="padding:0" id="aktuality-table"></div></div>
+      </div>
+
+      <!-- RECENZE -->
+      <div class="page-section" id="sec-recenze">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+          <button class="btn btn-green" onclick="openModal('recenze')">+ Nová recenze</button>
+        </div>
+        <div class="card"><div class="card-body" style="padding:0" id="recenze-table"></div></div>
+      </div>
+
+      <!-- KARIERA -->
+      <div class="page-section" id="sec-kariera">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+          <button class="btn btn-green" onclick="openModal('kariera')">+ Nová pozice</button>
+        </div>
+        <div class="card"><div class="card-body" style="padding:0" id="kariera-table"></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// ── Navigation ─────────────────────────────
+function go(page) {
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  const nav = document.getElementById('nav-' + page);
+  if (nav) nav.classList.add('active');
+  const titles = {dashboard:'Přehled',obsah:'Obsah webu',stroje:'Stroje',aktuality:'Aktuality',recenze:'Recenze',kariera:'Kariéra'};
+  document.getElementById('page-title').textContent = titles[page] || page;
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + page).classList.add('active');
+  // Show/hide save bar
+  document.querySelector('.save-bar').style.display = page === 'obsah' ? 'flex' : 'none';
+  // Load CRUD data
+  if (['stroje','aktuality','recenze','kariera'].includes(page)) loadList(page);
+}
+
+// ── Card toggle ────────────────────────────
+function toggleCard(header) {
+  header.classList.toggle('collapsed');
+  header.nextElementSibling.classList.toggle('collapsed');
+}
+
+// ── Modal ──────────────────────────────────
+function openModal(type, id) {
+  const overlay = document.getElementById('modal-overlay');
+  const content = document.getElementById('modal-content');
+  if (id) {
+    fetch(`/admin/api/${type}`).then(r=>r.json()).then(items => {
+      const item = items.find(i => i.id === id);
+      content.innerHTML = modalForms[type](item);
+      overlay.classList.add('active');
+    });
+  } else {
+    content.innerHTML = modalForms[type](null);
+    overlay.classList.add('active');
+  }
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ── File upload helper ─────────────────────
+async function uploadFile(input) {
+  if (!input.files[0]) return null;
+  const fd = new FormData();
+  fd.append('file', input.files[0]);
+  const res = await fetch('/admin/upload', {method:'POST', body:fd});
+  const data = await res.json();
+  return data.ok ? '/' + data.path : null;
+}
+
+// ── CRUD: Load list ────────────────────────
+async function loadList(type) {
+  const res = await fetch(`/admin/api/${type}`);
+  const items = await res.json();
+  const container = document.getElementById(`${type}-table`);
+  if (!items.length) {
+    container.innerHTML = `<div class="empty">Zatím žádné záznamy.</div>`;
+    return;
+  }
+  container.innerHTML = listRenderers[type](items);
+}
+
+// ── CRUD: Save ─────────────────────────────
+async function saveItem(type) {
+  const data = collectForms[type]();
+  if (!data) return;
+  const fileInput = document.getElementById('modal-foto');
+  if (fileInput && fileInput.files[0]) {
+    const path = await uploadFile(fileInput);
+    if (path) data.foto = path;
+  }
+  await fetch(`/admin/api/${type}`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+  closeModal();
+  loadList(type);
+}
+
+// ── CRUD: Delete ───────────────────────────
+async function deleteItem(type, id) {
+  if (!confirm('Opravdu smazat?')) return;
+  await fetch(`/admin/api/${type}/${id}`, {method:'DELETE'});
+  loadList(type);
+}
+
+// ── List renderers ─────────────────────────
+const listRenderers = {};
+
+listRenderers.stroje = items => `<table><thead><tr><th>Foto</th><th>Název</th><th>Kategorie</th><th>Odkaz</th><th>Stav</th><th></th></tr></thead><tbody>
+  ${items.map(r=>`<tr>
+    <td>${r.foto?`<img src="${esc(r.foto)}" class="thumb">`:'—'}</td>
+    <td><strong>${esc(r.nazev)}</strong></td>
+    <td style="font-size:12px;color:var(--soft)">${esc(r.kategorie)}</td>
+    <td style="font-size:12px">${r.url?`<a href="${esc(r.url)}" target="_blank" style="color:var(--green)">↗</a>`:'—'}</td>
+    <td><span class="badge ${r.aktivni?'badge-green':'badge-gray'}">${r.aktivni?'Aktivní':'Skrytý'}</span></td>
+    <td><div class="actions"><button class="btn btn-outline btn-sm" onclick="openModal('stroje',${r.id})">Upravit</button><button class="btn btn-red btn-sm" onclick="deleteItem('stroje',${r.id})">Smazat</button></div></td>
+  </tr>`).join('')}</tbody></table>`;
+
+listRenderers.aktuality = items => `<table><thead><tr><th>Foto</th><th>Titulek</th><th>Stav</th><th>Datum</th><th></th></tr></thead><tbody>
+  ${items.map(r=>`<tr>
+    <td>${r.foto?`<img src="${esc(r.foto)}" class="thumb">`:'—'}</td>
+    <td><strong>${esc(r.titulek)}</strong></td>
+    <td><span class="badge ${r.aktivni?'badge-green':'badge-gray'}">${r.aktivni?'Aktivní':'Skrytý'}</span></td>
+    <td style="color:#9CA3AF;font-size:12px">${esc(r.datum||'')}</td>
+    <td><div class="actions"><button class="btn btn-outline btn-sm" onclick="openModal('aktuality',${r.id})">Upravit</button><button class="btn btn-red btn-sm" onclick="deleteItem('aktuality',${r.id})">Smazat</button></div></td>
+  </tr>`).join('')}</tbody></table>`;
+
+listRenderers.recenze = items => `<table><thead><tr><th>Jméno</th><th>Text</th><th>Zdroj</th><th>Hvězdy</th><th>Stav</th><th></th></tr></thead><tbody>
+  ${items.map(r=>`<tr>
+    <td><strong>${esc(r.jmeno)}</strong></td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--soft)">${esc(r.text)}</td>
+    <td style="font-size:12px">${esc(r.zdroj)}</td>
+    <td class="star">${'★'.repeat(r.hvezdy||5)}</td>
+    <td><span class="badge ${r.aktivni?'badge-green':'badge-gray'}">${r.aktivni?'Aktivní':'Skrytý'}</span></td>
+    <td><div class="actions"><button class="btn btn-outline btn-sm" onclick="openModal('recenze',${r.id})">Upravit</button><button class="btn btn-red btn-sm" onclick="deleteItem('recenze',${r.id})">Smazat</button></div></td>
+  </tr>`).join('')}</tbody></table>`;
+
+listRenderers.kariera = items => `<table><thead><tr><th>Pozice</th><th>Úvazek</th><th>Místo</th><th>Stav</th><th></th></tr></thead><tbody>
+  ${items.map(r=>`<tr>
+    <td><strong>${esc(r.nazev)}</strong></td>
+    <td style="font-size:12px;color:var(--soft)">${esc(r.uvazek)}</td>
+    <td style="font-size:12px;color:var(--soft)">${esc(r.misto)}</td>
+    <td><span class="badge ${r.aktivni?'badge-green':'badge-gray'}">${r.aktivni?'Aktivní':'Skrytý'}</span></td>
+    <td><div class="actions"><button class="btn btn-outline btn-sm" onclick="openModal('kariera',${r.id})">Upravit</button><button class="btn btn-red btn-sm" onclick="deleteItem('kariera',${r.id})">Smazat</button></div></td>
+  </tr>`).join('')}</tbody></table>`;
+
+// ── Modal forms ────────────────────────────
+const modalForms = {};
+const cats = ['Traktory','Aplikační technika','Zahradní technika','Mulčování','Elektromobily','Senážní technika','Manipulátory','Ostatní'];
+
+modalForms.stroje = item => `
+  <h2>${item?'Upravit stroj':'Nový stroj'}</h2>
+  <input type="hidden" id="modal-id" value="${item?.id||''}">
+  <div class="form-row">
+    <div class="form-group"><label>Název *</label><input id="modal-nazev" value="${esc(item?.nazev??'')}"></div>
+    <div class="form-group"><label>Kategorie</label><select id="modal-kategorie">
+      ${cats.map(c=>`<option ${(item?.kategorie??'')==c?'selected':''}>${c}</option>`).join('')}
+    </select></div>
+  </div>
+  <div class="form-group"><label>Odkaz na výrobce (URL)</label><input id="modal-url" value="${esc(item?.url??'')}" placeholder="https://..."></div>
+  <div class="form-group"><label>Popis</label><textarea id="modal-popis">${esc(item?.popis??'')}</textarea></div>
+  <div class="form-group"><label>Foto (URL nebo upload)</label><input type="file" id="modal-foto" accept="image/*">
+    ${item?.foto?`<img src="${item.foto}" class="img-preview">`:''}
+    <input type="hidden" id="modal-foto-existing" value="${esc(item?.foto??'')}">
+  </div>
+  <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+    <input type="checkbox" id="modal-aktivni" ${(item?.aktivni??true)?'checked':''} style="width:16px;height:16px;accent-color:var(--green)">
+    <label style="text-transform:none;font-size:14px;font-weight:500;color:var(--text)">Zobrazit na webu</label>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" onclick="closeModal()">Zrušit</button>
+    <button class="btn btn-green" onclick="saveItem('stroje')">Uložit</button>
+  </div>`;
+
+modalForms.aktuality = item => `
+  <h2>${item?'Upravit aktualitu':'Nová aktualita'}</h2>
+  <input type="hidden" id="modal-id" value="${item?.id||''}">
+  <div class="form-group"><label>Titulek *</label><input id="modal-titulek" value="${esc(item?.titulek??'')}"></div>
+  <div class="form-group"><label>Obsah</label><textarea id="modal-obsah" rows="6">${esc(item?.obsah??'')}</textarea></div>
+  <div class="form-row">
+    <div class="form-group"><label>Datum</label><input id="modal-datum" value="${esc(item?.datum??new Date().toISOString().slice(0,10))}"></div>
+    <div class="form-group"><label>Foto</label><input type="file" id="modal-foto" accept="image/*">
+      <input type="hidden" id="modal-foto-existing" value="${esc(item?.foto??'')}">
+    </div>
+  </div>
+  <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+    <input type="checkbox" id="modal-aktivni" ${(item?.aktivni??true)?'checked':''} style="width:16px;height:16px;accent-color:var(--green)">
+    <label style="text-transform:none;font-size:14px;font-weight:500;color:var(--text)">Zobrazit na webu</label>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" onclick="closeModal()">Zrušit</button>
+    <button class="btn btn-green" onclick="saveItem('aktuality')">Uložit</button>
+  </div>`;
+
+modalForms.recenze = item => `
+  <h2>${item?'Upravit recenzi':'Nová recenze'}</h2>
+  <input type="hidden" id="modal-id" value="${item?.id||''}">
+  <div class="form-row">
+    <div class="form-group"><label>Jméno *</label><input id="modal-jmeno" value="${esc(item?.jmeno??'')}"></div>
+    <div class="form-group"><label>Iniciály</label><input id="modal-inicialy" value="${esc(item?.inicialy??'')}"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>Zdroj</label><input id="modal-zdroj" value="${esc(item?.zdroj??'Google')}"></div>
+    <div class="form-group"><label>Hvězdy</label><select id="modal-hvezdy">
+      ${[5,4,3,2,1].map(i=>`<option value="${i}" ${(item?.hvezdy??5)==i?'selected':''}>${i} hvězd</option>`).join('')}
+    </select></div>
+  </div>
+  <div class="form-group"><label>Text recenze *</label><textarea id="modal-text" rows="5">${esc(item?.text??'')}</textarea></div>
+  <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+    <input type="checkbox" id="modal-aktivni" ${(item?.aktivni??true)?'checked':''} style="width:16px;height:16px;accent-color:var(--green)">
+    <label style="text-transform:none;font-size:14px;font-weight:500;color:var(--text)">Zobrazit na webu</label>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" onclick="closeModal()">Zrušit</button>
+    <button class="btn btn-green" onclick="saveItem('recenze')">Uložit</button>
+  </div>`;
+
+modalForms.kariera = item => `
+  <h2>${item?'Upravit pozici':'Nová pozice'}</h2>
+  <input type="hidden" id="modal-id" value="${item?.id||''}">
+  <div class="form-group"><label>Název pozice *</label><input id="modal-nazev" value="${esc(item?.nazev??'')}"></div>
+  <div class="form-row">
+    <div class="form-group"><label>Úvazek</label><input id="modal-uvazek" value="${esc(item?.uvazek??'Plný úvazek')}"></div>
+    <div class="form-group"><label>Místo</label><input id="modal-misto" value="${esc(item?.misto??'J. Hradec')}"></div>
+  </div>
+  <div class="form-group"><label>Popis</label><textarea id="modal-popis" rows="4">${esc(item?.popis??'')}</textarea></div>
+  <div class="form-group"><label>Tagy (čárkou)</label><input id="modal-tagy" value="${esc(item?.tagy??'')}"></div>
+  <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+    <input type="checkbox" id="modal-aktivni" ${(item?.aktivni??true)?'checked':''} style="width:16px;height:16px;accent-color:var(--green)">
+    <label style="text-transform:none;font-size:14px;font-weight:500;color:var(--text)">Zobrazit na webu</label>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" onclick="closeModal()">Zrušit</button>
+    <button class="btn btn-green" onclick="saveItem('kariera')">Uložit</button>
+  </div>`;
+
+// ── Collect form data ──────────────────────
+const collectForms = {};
+
+collectForms.stroje = () => {
+  const nazev = document.getElementById('modal-nazev').value.trim();
+  if (!nazev) { alert('Vyplňte název'); return null; }
+  return {
+    id: parseInt(document.getElementById('modal-id').value) || undefined,
+    nazev,
+    kategorie: document.getElementById('modal-kategorie').value,
+    url: document.getElementById('modal-url').value.trim(),
+    popis: document.getElementById('modal-popis').value.trim(),
+    foto: document.getElementById('modal-foto-existing').value,
+    aktivni: document.getElementById('modal-aktivni').checked
+  };
+};
+
+collectForms.aktuality = () => {
+  const titulek = document.getElementById('modal-titulek').value.trim();
+  if (!titulek) { alert('Vyplňte titulek'); return null; }
+  return {
+    id: parseInt(document.getElementById('modal-id').value) || undefined,
+    titulek,
+    obsah: document.getElementById('modal-obsah').value.trim(),
+    datum: document.getElementById('modal-datum').value.trim(),
+    foto: document.getElementById('modal-foto-existing')?.value || '',
+    aktivni: document.getElementById('modal-aktivni').checked
+  };
+};
+
+collectForms.recenze = () => {
+  const jmeno = document.getElementById('modal-jmeno').value.trim();
+  const text = document.getElementById('modal-text').value.trim();
+  if (!jmeno || !text) { alert('Vyplňte jméno a text'); return null; }
+  return {
+    id: parseInt(document.getElementById('modal-id').value) || undefined,
+    jmeno, text,
+    inicialy: document.getElementById('modal-inicialy').value.trim(),
+    zdroj: document.getElementById('modal-zdroj').value.trim(),
+    hvezdy: parseInt(document.getElementById('modal-hvezdy').value),
+    aktivni: document.getElementById('modal-aktivni').checked
+  };
+};
+
+collectForms.kariera = () => {
+  const nazev = document.getElementById('modal-nazev').value.trim();
+  if (!nazev) { alert('Vyplňte název pozice'); return null; }
+  return {
+    id: parseInt(document.getElementById('modal-id').value) || undefined,
+    nazev,
+    uvazek: document.getElementById('modal-uvazek').value.trim(),
+    misto: document.getElementById('modal-misto').value.trim(),
+    popis: document.getElementById('modal-popis').value.trim(),
+    tagy: document.getElementById('modal-tagy').value.trim(),
+    aktivni: document.getElementById('modal-aktivni').checked
+  };
+};
+
+// Init
+document.querySelector('.save-bar').style.display = 'none';
+go('dashboard');
+</script>
+</body>
+</html>
